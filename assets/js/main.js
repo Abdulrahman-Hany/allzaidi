@@ -695,13 +695,24 @@
       );
     });
 })(jQuery);
-
 const languageToggle = document.getElementById("language-toggle");
 
-function changeLanguage(save = true) {
-  const isArabic = languageToggle.checked;
+function showLoader() {
+  const loader = document.getElementById("loader");
+  if (loader) loader.style.display = "flex"; // يظهر اللودر
+}
 
+function hideLoader() {
+  const loader = document.getElementById("loader");
+  if (loader) loader.style.display = "none"; // يختفي اللودر
+}
+
+function changeLanguage(save = true) {
+  showLoader(); // نعرض اللودر أولاً
+
+  const isArabic = languageToggle.checked;
   const translatableElements = document.querySelectorAll("[en-lang][ar-lang]");
+  
   translatableElements.forEach((el) => {
     el.textContent = isArabic
       ? el.getAttribute("ar-lang")
@@ -714,6 +725,9 @@ function changeLanguage(save = true) {
   if (save) {
     localStorage.setItem("language", isArabic ? "ar" : "en");
   }
+
+  // نخفي اللودر بعد تحديث اللغة
+  setTimeout(hideLoader, 300); // ممكن تعدل 300ms حسب سرعة التغيير
 }
 
 languageToggle.addEventListener("change", () => changeLanguage(true));
@@ -723,5 +737,25 @@ window.addEventListener("DOMContentLoaded", () => {
   if (savedLang) {
     languageToggle.checked = savedLang === "ar";
   }
-  changeLanguage(false); // false عشان مانحفظش تاني عند التحميل
+  changeLanguage(false); 
 });
+
+// نخفي اللودر عند تحميل الصفحة بالكامل
+window.addEventListener("load", function() {
+  hideLoader();
+});
+
+  window.addEventListener("load", function() {
+    document.getElementById("loader").style.display = "none";
+  });
+
+
+  const whatsappBtn = document.querySelector(".whatsapp-float");
+
+  whatsappBtn.addEventListener("mouseenter", () => {
+    whatsappBtn.style.transform = "scale(1.15)";
+  });
+
+  whatsappBtn.addEventListener("mouseleave", () => {
+    whatsappBtn.style.transform = "scale(1)";
+  });
